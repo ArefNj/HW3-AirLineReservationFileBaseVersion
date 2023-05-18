@@ -40,9 +40,9 @@ public class FlightFile extends  WorkOnFiles{
             String flightDate = readString(pos+ STRING_FILE_SIZE *3);
             String flightTime = readString(pos+ STRING_FILE_SIZE *4);
             randomAccessFile.seek(pos + STRING_FILE_SIZE *5);
-            int flightPrice = randomAccessFile.read();
-            int flightSeats = randomAccessFile.read();
-            int flightBookedSeats = randomAccessFile.read();
+            int flightPrice = randomAccessFile.readInt();
+            int flightSeats = randomAccessFile.readInt();
+            int flightBookedSeats = randomAccessFile.readInt();
             Flight flight = new Flight(flightId,flightOrigen,flightDestination,flightDate,flightTime,flightPrice,flightSeats,flightBookedSeats);
 
             printFlight(flight);
@@ -50,6 +50,7 @@ public class FlightFile extends  WorkOnFiles{
         randomAccessFile.close();
         new Menu().pause();
     }
+
 
     /**
      * print a specific flight details
@@ -192,9 +193,6 @@ public class FlightFile extends  WorkOnFiles{
      */
     public void addFlight() throws IOException {
         Scanner scan = new Scanner(System.in);
-        randomAccessFile = new RandomAccessFile(flightPath, "rw");
-        randomAccessFile.seek(randomAccessFile.length());
-
         // get ID in a temp String to check
         System.out.println("Enter Flight Id");
         String tempID = scan.nextLine();
@@ -204,8 +202,12 @@ public class FlightFile extends  WorkOnFiles{
             System.out.println("This id has taken");
             return;
         }
+        tempID = fixStringToWrite(tempID);
 
-        randomAccessFile.writeChars(fixStringToWrite(tempID)); //0 - 40 for flightID
+        randomAccessFile = new RandomAccessFile(flightPath, "rw");
+        randomAccessFile.seek(randomAccessFile.length());
+
+        randomAccessFile.writeChars(tempID); //0 - 40 for flightID
         System.out.println("Enter The Origen");
         randomAccessFile.writeChars(fixStringToWrite(scan.nextLine())); // 40 - 80 for Origen
         System.out.println("Enter the Destination");
