@@ -8,8 +8,9 @@ public class WorkOnFiles {
     protected RandomAccessFile randomAccessFile;
 
 
-    public String readString(long startPoint) throws IOException {
+    public String readString(long startPoint,String pathFile) throws IOException {
         StringBuilder str = new StringBuilder();
+        randomAccessFile.seek(startPoint);
         for (long i = 0; i < STRING_LENGTH; i++) {
             str.append(randomAccessFile.readChar());
         }

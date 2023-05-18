@@ -1,10 +1,12 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
 
 public class PassengerFile extends WorkOnFiles{
 
-    private final String userPath = "..\\file\\Users.kakasangi";
+    private final String userPath = "D:\\Advance Programing\\HW3-AirLineReservationFileBaseVersion\\files\\Users.kakasangi";
+
 
     private final int LENGTH_OF_LINE = 84;
 
@@ -56,13 +58,13 @@ public class PassengerFile extends WorkOnFiles{
      * @param passengerIndexLine the index of Passenger in All
      */
     public void chargeAccount(int passengerIndexLine) throws IOException {
+        Scanner scan = new Scanner(System.in);
         randomAccessFile = new RandomAccessFile(userPath, "rw");
         // GO TO START OF LINE AND Charge SECTION
         int pos = passengerIndexLine * LENGTH_OF_LINE + (STRING_FILE_SIZE* 2);
         randomAccessFile.seek(pos);
 
-        Scanner scan = new Scanner(System.in);
-        int currentCharge = randomAccessFile.read();
+        int currentCharge = randomAccessFile.readInt();
         System.out.println("Your Balance : " + currentCharge);
 
         System.out.println("enter how much do you want to charge your account ");
@@ -71,6 +73,26 @@ public class PassengerFile extends WorkOnFiles{
         randomAccessFile.writeInt(currentCharge + charge);
 
         randomAccessFile.close();
+    }
+
+    /**
+     * Searching an id form User ArrayList
+     *
+     * @param targetId the id we're looking for
+     * @return The indexOf the targetId ( return -1 if it was not found )
+     */
+    public int findUserIndex(String targetId) throws IOException {
+        randomAccessFile = new RandomAccessFile(userPath, "rw");
+        int pos;
+        for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
+            pos = i * LENGTH_OF_LINE;
+            if (readString(pos, userPath).equals(targetId)) {
+                randomAccessFile.close();
+                return i;
+            }
+        }
+        randomAccessFile.close();
+        return -1;
     }
 
     /**
@@ -86,8 +108,8 @@ public class PassengerFile extends WorkOnFiles{
         for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
             pos = i * LENGTH_OF_LINE;
 
-            if (readString(pos).equals(targetId)) {
-                if (readString(pos + STRING_LENGTH).equals(targetPass)) {
+            if (readString(pos, userPath).equals(targetId)) {
+                if (readString(pos + STRING_FILE_SIZE, userPath).equals(targetPass)) {
                     randomAccessFile.close();
                     return i;
                 }
@@ -99,13 +121,13 @@ public class PassengerFile extends WorkOnFiles{
         return -1;
     }
 
-    public String readString(long startPoint) throws IOException {
-        randomAccessFile = new RandomAccessFile(userPath, "rw");
-        randomAccessFile.seek(startPoint);
-        String tempStr = super.readString(startPoint);
-        return  tempStr.trim();
-
-    }
+//    public String readString(long startPoint) throws IOException {
+//        randomAccessFile = new RandomAccessFile(userPath, "rw");
+//        randomAccessFile.seek(startPoint);
+//        String tempStr = super.readString(startPoint);
+//        return  tempStr.trim();
+//
+//    }
 
 
 
