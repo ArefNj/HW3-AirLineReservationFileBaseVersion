@@ -21,9 +21,9 @@ public class Admin {
 
         switch (key) {
             // Add
-//            case 1:
-//                flights.addFlight();
-//                break;
+            case 1:
+                flights.addFlight();
+                break;
 //            // Update
 //            case 2:
 //                flights.updateFlight();

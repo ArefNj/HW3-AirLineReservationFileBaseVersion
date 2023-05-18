@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
@@ -86,7 +85,7 @@ public class PassengerFile extends WorkOnFiles{
         int pos;
         for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
             pos = i * LENGTH_OF_LINE;
-            if (readString(pos, userPath).equals(targetId)) {
+            if (readString(pos).equals(targetId)) {
                 randomAccessFile.close();
                 return i;
             }
@@ -108,8 +107,8 @@ public class PassengerFile extends WorkOnFiles{
         for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
             pos = i * LENGTH_OF_LINE;
 
-            if (readString(pos, userPath).equals(targetId)) {
-                if (readString(pos + STRING_FILE_SIZE, userPath).equals(targetPass)) {
+            if (readString(pos).equals(targetId)) {
+                if (readString(pos + STRING_FILE_SIZE).equals(targetPass)) {
                     randomAccessFile.close();
                     return i;
                 }
@@ -120,15 +119,5 @@ public class PassengerFile extends WorkOnFiles{
     randomAccessFile.close();
         return -1;
     }
-
-//    public String readString(long startPoint) throws IOException {
-//        randomAccessFile = new RandomAccessFile(userPath, "rw");
-//        randomAccessFile.seek(startPoint);
-//        String tempStr = super.readString(startPoint);
-//        return  tempStr.trim();
-//
-//    }
-
-
 
 }
