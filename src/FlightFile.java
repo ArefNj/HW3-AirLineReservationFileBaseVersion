@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class FlightFile extends  WorkOnFiles{
 
-    private final String flightPath = "..\\file\\Flights.kakasangi";
+    private final String flightPath = "files/Flights.kakasangi";
 
     private final int LENGTH_OF_LINE = 212;
 

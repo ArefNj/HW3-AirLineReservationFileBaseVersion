@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class PassengerFile extends WorkOnFiles{
 
-    private final String userPath = "D:\\Advance Programing\\HW3-AirLineReservationFileBaseVersion\\files\\Users.kakasangi";
+    private final String userPath = "files/Users.kakasangi";
 
 
     private final int LENGTH_OF_LINE = 84;
