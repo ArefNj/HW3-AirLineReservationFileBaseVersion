@@ -7,6 +7,8 @@ public class WorkOnFiles {
     protected final int STRING_FILE_SIZE = STRING_LENGTH * 2;
     protected RandomAccessFile randomAccessFile;
 
+    protected final int INT_SIZE = 4;
+
 
     public String readString(long startPoint) throws IOException {
         StringBuilder str = new StringBuilder();

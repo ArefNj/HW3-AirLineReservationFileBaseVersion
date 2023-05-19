@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dee4e575-340d-4155-aa4a-f5e813a70243" name="Changes" comment="Add flight method for Admin section">
+    <list default="true" id="dee4e575-340d-4155-aa4a-f5e813a70243" name="Changes" comment="fix add flight and flight scheduled">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/Flights.kakasangi" beforeDir="false" afterPath="$PROJECT_DIR$/files/Flights.kakasangi" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Admin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FlightFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FlightFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WorkOnFiles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WorkOnFiles.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +44,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "extract.method.default.visibility": "public",
-    "last_opened_file_path": "D:/Advance Programing/midterm",
+    "last_opened_file_path": "D:/Advance Programing/HW2-AirLineReservation",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -59,7 +62,9 @@
       <workItem from="1684059779824" duration="3381000" />
       <workItem from="1684332390872" duration="7888000" />
       <workItem from="1684348447195" duration="3695000" />
-      <workItem from="1684390735090" duration="11157000" />
+      <workItem from="1684390735090" duration="11454000" />
+      <workItem from="1684404709758" duration="311000" />
+      <workItem from="1684477548815" duration="2796000" />
     </task>
     <task id="LOCAL-00001" summary="init commit , Add classes , Add WorkOnFiles , rewrite some methods ( I Don't remember :) )">
       <created>1684396197784</created>
@@ -89,7 +94,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684402826894</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fix add flight and flight scheduled">
+      <created>1684404207248</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1684404207248</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -111,6 +123,7 @@
     <MESSAGE value="comment some methods to test" />
     <MESSAGE value="fix Relative Paths and&#10;1# test : Successfully done!" />
     <MESSAGE value="Add flight method for Admin section" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add flight method for Admin section" />
+    <MESSAGE value="fix add flight and flight scheduled" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix add flight and flight scheduled" />
   </component>
 </project>

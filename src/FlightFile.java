@@ -7,7 +7,7 @@ public class FlightFile extends  WorkOnFiles{
 
     private final String flightPath = "files/Flights.kakasangi";
 
-    private final int LENGTH_OF_LINE = 212;
+    private final long LENGTH_OF_LINE = 212;
 
 
 
@@ -99,7 +99,7 @@ public class FlightFile extends  WorkOnFiles{
      * @param targetFlightId the flight ID that you wants to find
      * @return the index the target ( return -1 if it was not found )
      */
-    public int findFlightIndex(String targetFlightId) throws IOException {
+    public int searchFlightIndexLineByFlightID(String targetFlightId) throws IOException {
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
 
         for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
@@ -185,7 +185,6 @@ public class FlightFile extends  WorkOnFiles{
         randomAccessFile.close();
     }
 
-
     // Administrator methods
 
     /**
@@ -198,7 +197,7 @@ public class FlightFile extends  WorkOnFiles{
         String tempID = scan.nextLine();
 
         // check ID
-        if (findFlightIndex(tempID) != -1) {
+        if (searchFlightIndexLineByFlightID(tempID) != -1) {
             System.out.println("This id has taken");
             return;
         }
@@ -223,6 +222,116 @@ public class FlightFile extends  WorkOnFiles{
         randomAccessFile.writeInt(0); // 208 - 212 for Count of Booked Seats
 
         randomAccessFile.close();
+
+    }
+
+    /**
+     * Update flight form flight list
+     */
+    public void updateFlight() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(" Please enter the Flight Id Which flight do yo want to update ");
+        String flightId = scanner.nextLine();
+
+        int flightIndexLine = searchFlightIndexLineByFlightID(flightId);
+
+        if (flightIndexLine == -1) {
+            System.out.println("Please check your entry ");
+            new Menu().pause();
+            return;
+        }
+
+        // Print UpDate Menu
+        System.out.println("""
+                which detail do you want to change
+                <1> Flight Id
+                <2> Origin
+                <3> Distinction
+                <4> Date
+                <5> Time
+                <6> Price
+                <7> Seats
+                <0> Exit
+                                        
+                -->""");
+
+        int key = scanner.nextInt();
+        randomAccessFile = new RandomAccessFile(flightPath,"rw");
+
+        switch (key) {
+            case 1:
+                System.out.println("Enter new Flight id");
+                scanner.nextLine();
+                // get input
+                String tempId = scanner.nextLine();
+
+                if (searchFlightIndexLineByFlightID(tempId) != -1){
+                    System.out.println("THIS ID WAS TOKEN");
+                    new Menu().pause();
+                    break;
+                }
+                randomAccessFile = new RandomAccessFile(flightPath,"rw");
+                tempId = fixStringToWrite(tempId);
+                randomAccessFile.seek( flightIndexLine * LENGTH_OF_LINE);
+                randomAccessFile.writeChars(tempId);
+                break;
+            case 2: // ORIGIN
+                System.out.println("Enter new Origin");
+                scanner.nextLine();
+                // get input
+                String tempOrigin = scanner.nextLine();
+
+                randomAccessFile.seek( flightIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE);
+                randomAccessFile.writeChars(tempOrigin);
+                break;
+            case 3: // DISTANCE
+                System.out.println("Enter new Distance");
+                scanner.nextLine();
+                String tempDistance = scanner.nextLine();
+                tempDistance = fixStringToWrite(tempDistance);
+                randomAccessFile.seek( flightIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE*2);
+                randomAccessFile.writeChars(tempDistance);
+                break;
+            case 4: // DATE
+                System.out.println("Enter new Date");
+                scanner.nextLine();
+                String tempDate = scanner.nextLine();
+                tempDate = fixStringToWrite(tempDate);
+                randomAccessFile.seek( flightIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE*3);
+                randomAccessFile.writeChars(tempDate);
+                break;
+            case 5: // TIME
+                System.out.println("Enter new Time");
+                scanner.nextLine();
+                String tempTime = scanner.nextLine();
+                tempTime = fixStringToWrite(tempTime);
+                randomAccessFile.seek( flightIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE*4);
+                randomAccessFile.writeChars(tempTime);
+                break;
+            case 6: // PRICE
+                System.out.println("Enter new Price");
+                scanner.nextLine();
+                int tempPrice = scanner.nextInt();
+                randomAccessFile.seek( flightIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE*5);
+                randomAccessFile.writeInt(tempPrice);
+                break;
+            case 7: // SEATS
+                System.out.println("Enter Seats");
+                scanner.nextLine();
+                int tempSeats = scanner.nextInt();
+                randomAccessFile.seek( flightIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE*5 + INT_SIZE); // +4 for the Price Int
+                randomAccessFile.writeInt(tempSeats);
+                break;
+            case 0: // EXIT
+                return;
+            default:
+                System.out.println("check your Input");
+                new Menu().pause();
+                this.updateFlight();
+                break;
+        }
+        randomAccessFile.close();
+
 
     }
 

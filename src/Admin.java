@@ -25,9 +25,9 @@ public class Admin {
                 flights.addFlight();
                 break;
 //            // Update
-//            case 2:
-//                flights.updateFlight();
-//                break;
+            case 2:
+                flights.updateFlight();
+                break;
 //            // Remove
 //            case 3:
 //                flights.removeFlight();
