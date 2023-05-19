@@ -24,15 +24,15 @@ public class Admin {
             case 1:
                 flights.addFlight();
                 break;
-//            // Update
+            // Update
             case 2:
                 flights.updateFlight();
                 break;
-//            // Remove
-//            case 3:
-//                flights.removeFlight();
-//                break;
-            // Flight List
+            // Remove
+            case 3:
+                flights.removeFlight();
+                break;
+            // Flight Schedule
             case 4:
                 new FlightFile().printFlightHeader();
                 new FlightFile().printFlight();

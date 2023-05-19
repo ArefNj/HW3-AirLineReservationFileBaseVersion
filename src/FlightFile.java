@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.Scanner;
 
 public class FlightFile extends  WorkOnFiles{
@@ -204,7 +205,18 @@ public class FlightFile extends  WorkOnFiles{
         tempID = fixStringToWrite(tempID);
 
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
-        randomAccessFile.seek(randomAccessFile.length());
+        long pos;
+        // GO TO EMPTY LINE
+        if (searchFlightIndexLineByFlightID("N/A") != -1){
+            randomAccessFile = new RandomAccessFile(flightPath, "rw");
+            pos = (searchFlightIndexLineByFlightID("N/A") * LENGTH_OF_LINE );
+        }
+        else { // GO TO THE END OF FILE
+            randomAccessFile = new RandomAccessFile(flightPath, "rw");
+            pos = randomAccessFile.length();
+        }
+        randomAccessFile = new RandomAccessFile(flightPath, "rw");
+        randomAccessFile.seek(pos);
 
         randomAccessFile.writeChars(tempID); //0 - 40 for flightID
         System.out.println("Enter The Origen");
@@ -332,6 +344,47 @@ public class FlightFile extends  WorkOnFiles{
         }
         randomAccessFile.close();
 
+
+    }
+
+    /**
+     * remove a flight from a flight list
+     */
+    public void removeFlight() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(" Please enter the Flight Id Which flight do yo want to remove ");
+        String flightId = scanner.nextLine();
+
+        randomAccessFile = new RandomAccessFile(flightPath,"rw");
+        int flightIndexLine = searchFlightIndexLineByFlightID(flightId);
+
+        if (flightIndexLine == -1) {
+            System.out.println("Please check your entry ");
+            new Menu().pause();
+            return;
+        }
+
+        randomAccessFile = new RandomAccessFile(flightPath,"rw");
+        randomAccessFile.seek(flightIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE*5 + INT_SIZE * 2);
+        int countBookedSeat = randomAccessFile.readInt();
+
+        if (countBookedSeat != 0) {
+            System.out.println("you cannot remove this flight because someone booked this flight");
+            new Menu().pause();
+            return;
+        }
+
+        randomAccessFile.seek(flightIndexLine * LENGTH_OF_LINE);
+        randomAccessFile.writeChars(fixStringToWrite("N/A")); // ID
+        randomAccessFile.writeChars(fixStringToWrite("N/A")); // ORIGEN
+        randomAccessFile.writeChars(fixStringToWrite("N/A")); // DESTINATION
+        randomAccessFile.writeChars(fixStringToWrite("N/A")); // DATE
+        randomAccessFile.writeChars(fixStringToWrite("N/A")); // TIME
+        randomAccessFile.writeInt(0); // PRICE
+        randomAccessFile.writeInt(0); // SEATS
+        randomAccessFile.writeInt(0); // BOOKED SEATS
+
+        randomAccessFile.close();
 
     }
 

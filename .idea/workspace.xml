@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dee4e575-340d-4155-aa4a-f5e813a70243" name="Changes" comment="fix add flight and flight scheduled">
+    <list default="true" id="dee4e575-340d-4155-aa4a-f5e813a70243" name="Changes" comment="Add Admin Update Section and it works!">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/files/Flights.kakasangi" beforeDir="false" afterPath="$PROJECT_DIR$/files/Flights.kakasangi" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Admin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FlightFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FlightFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/WorkOnFiles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WorkOnFiles.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +64,7 @@
       <workItem from="1684348447195" duration="3695000" />
       <workItem from="1684390735090" duration="11454000" />
       <workItem from="1684404709758" duration="311000" />
-      <workItem from="1684477548815" duration="2796000" />
+      <workItem from="1684477548815" duration="5396000" />
     </task>
     <task id="LOCAL-00001" summary="init commit , Add classes , Add WorkOnFiles , rewrite some methods ( I Don't remember :) )">
       <created>1684396197784</created>
@@ -101,7 +101,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684404207248</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add Admin Update Section and it works!">
+      <created>1684480921667</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1684480921667</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,6 +131,7 @@
     <MESSAGE value="fix Relative Paths and&#10;1# test : Successfully done!" />
     <MESSAGE value="Add flight method for Admin section" />
     <MESSAGE value="fix add flight and flight scheduled" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix add flight and flight scheduled" />
+    <MESSAGE value="Add Admin Update Section and it works!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add Admin Update Section and it works!" />
   </component>
 </project>
