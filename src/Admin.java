@@ -35,7 +35,7 @@ public class Admin {
             // Flight Schedule
             case 4:
                 new FlightFile().printFlightHeader();
-                new FlightFile().printFlight();
+                new FlightFile().printAllFlight();
                 break;
             // Exit point
             case 0:

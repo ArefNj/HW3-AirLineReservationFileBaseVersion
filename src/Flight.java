@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Flight {
     private String flightID;
     private String Origen;
@@ -17,6 +19,20 @@ public class Flight {
         this.price = price;
         this.seats = seats;
         this.bookedSeats = bookedSeats;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flight flight = (Flight) o;
+        return price == flight.price && seats == flight.seats && bookedSeats == flight.bookedSeats && Objects.equals(flightID, flight.flightID) && Objects.equals(Origen, flight.Origen) && Objects.equals(destination, flight.destination) && Objects.equals(date, flight.date) && Objects.equals(time, flight.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(flightID, Origen, destination, date, time, price, seats, bookedSeats);
     }
 
     /**

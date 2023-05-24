@@ -113,7 +113,7 @@ public class Menu {
                 AllPassengerList.changePassword(passengerIndex, newPassengerPassword);
             }
             // searching
-//            case 2 -> AllFlightsList.filterFlight(AllFlightsList.getFlights());
+            case 2 -> AllFlightsList.filterFlight();
 
             // booking
 //            case 3 -> AllUserList.bookingTicket(AllFlightsList, AllUserList.getUsers().get(passengerIndex));

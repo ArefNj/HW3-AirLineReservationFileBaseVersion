@@ -1,14 +1,14 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
-import java.util.Scanner;
+import java.util.*;
 
 public class FlightFile extends  WorkOnFiles{
 
     private final String flightPath = "files/Flights.kakasangi";
 
     private final long LENGTH_OF_LINE = 212;
+
+    private final String NO_FILTER = "X";
 
 
 
@@ -31,7 +31,7 @@ public class FlightFile extends  WorkOnFiles{
     /**
      * print all flight which passed the method
      */
-    public void printFlight() throws IOException {
+    public void printAllFlight() throws IOException {
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
         for (int i = 0; i < randomAccessFile.length()/ LENGTH_OF_LINE ; i++) {
             long pos = (long) i * LENGTH_OF_LINE;
@@ -78,7 +78,7 @@ public class FlightFile extends  WorkOnFiles{
      * @param passengerFlight the passenger flight list
      * @param ticketId        the ticket ID of flight
      */
-    public void printFlight(Flight passengerFlight, int ticketId) {
+    public void printFlightWithTicketId(Flight passengerFlight, int ticketId) {
         System.out.println("..........................................................................................................");
         System.out.printf("|%-11s|%-11s|%-13s|%-12s|%-11s|%-,11d|%-6d|%-12d|%-9d|\n"
                 , passengerFlight.getFlightID()
@@ -127,9 +127,14 @@ public class FlightFile extends  WorkOnFiles{
 
         for (int i = 0; i < randomAccessFile.length()/ LENGTH_OF_LINE; i++) {
             // GO TO ORIGIN SECTION
-            long pos = ((long) i * LENGTH_OF_LINE) + STRING_LENGTH;
-            ExtractFlightFromFile(targetFlightOrigen, filterFlights, pos);
+            long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE;
+            if (readString(pos).equals(targetFlightOrigen)){
+            ExtractFlightFromFile(targetFlightOrigen, filterFlights,i * LENGTH_OF_LINE );
+
+            }
+
         }
+
         randomAccessFile.close();
     }
 
@@ -144,7 +149,7 @@ public class FlightFile extends  WorkOnFiles{
 
         for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
             // GO TO DESTINATION SECTION
-            long pos = ((long) i * LENGTH_OF_LINE) + STRING_LENGTH *2;
+            long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 2;
             ExtractFlightFromFile(targetDestination, filterFlights, pos);
         }
         randomAccessFile.close();
@@ -163,7 +168,7 @@ public class FlightFile extends  WorkOnFiles{
 
         for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE ; i++) {
             // GO TO DATE SECTION
-            long pos = ((long) i * LENGTH_OF_LINE) + STRING_LENGTH *3;
+            long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 3;
             ExtractFlightFromFile(targetDate, filterFlights, pos);
         }
         randomAccessFile.close();
@@ -180,11 +185,132 @@ public class FlightFile extends  WorkOnFiles{
 
         for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE ; i++) {
             // GO TO DATE SECTION
-            long pos = ((long) i * LENGTH_OF_LINE) + STRING_LENGTH *4;
+            long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 4;
             ExtractFlightFromFile(targetTime, filterFlights, pos);
         }
         randomAccessFile.close();
     }
+
+
+
+    /**
+     * search Filter section
+     */
+    public void filterFlight() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("""
+                Do you want to show you all Flights
+                <1> Yes
+                <2> No
+                <0> return
+                                
+                -->
+                """);
+
+        int showAll = scanner.nextInt();
+        switch (showAll) {
+            // SHOW ALL
+            case 1:
+                printFlightHeader();
+                printAllFlight();
+                break;
+            // FILTER SECTION
+            case 2:
+                System.out.println("Input Origen for Filter Flights by Origen ( Enter X for skip ) ");
+                scanner.nextLine();
+                String origen = scanner.nextLine();
+
+                System.out.println("Input Destination for Filter Flights by Destination ( Enter X for skip ) ");
+                String destination = scanner.nextLine();
+
+                System.out.println("Input Date for Filter Flights by Date ( Enter X for skip ) ");
+                String date = scanner.nextLine();
+
+                System.out.println("Input Time for Filter Flights by Time ( Enter X for skip ) ");
+                String time = scanner.nextLine();
+
+                System.out.println("enter Y to Filter Flights by price (if you dont want to enter something");
+                String price = scanner.nextLine();
+
+                // USE HashSet TO STORAGE THE FLIGHTS
+                ArrayList<Flight> newFlightList = new ArrayList<>();
+
+                // ORIGEN FILTER
+                if (!origen.equals(NO_FILTER)) {
+                    filterFlightsByOrigen(origen, newFlightList);
+                }
+                // DESTINATION FILTER
+                if (!destination.equals(NO_FILTER)) {
+                    filterFlightsByDestination(destination, newFlightList);
+                }
+                // DATE FILTER
+                if (!date.equals(NO_FILTER)) {
+                    filterFlightsByDate(date, newFlightList);
+                }
+                // TIME FILTER
+                if (!time.equals(NO_FILTER)) {
+                    filterFlightsByTime(time, newFlightList);
+                }
+
+                // PRICE FILTER
+
+                if (price.equals("Y") && newFlightList.isEmpty()){
+                    randomAccessFile = new RandomAccessFile(flightPath, "rw");
+
+                    for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
+                        long pos = i * LENGTH_OF_LINE;
+                        ExtractFlightFromFile(NO_FILTER ,newFlightList , pos );
+                    }
+                    randomAccessFile.close();
+                }
+                if (price.equals("Y")) {
+                    System.out.println("Input the maximum price");
+                    int maxPrice = scanner.nextInt();
+                    System.out.println("Input the minimum price ");
+                    int minPrice = scanner.nextInt();
+                    boolean flag = false;
+
+
+                    for (int i = newFlightList.size() - 1; i >= 0; i--) {
+                        // check Max Price
+                        if (newFlightList.get(i).getPrice() <= maxPrice) {
+                            // check Min Price
+                            if (newFlightList.get(i).getPrice() >= minPrice) {
+
+                                // CHECK FOR PRINT HEADER
+                                if (!flag) {
+                                    flag = true;
+                                    printFlightHeader();
+                                }
+
+                                // PRINT
+                                printFlight(newFlightList.get(i));
+                            }
+                        }
+                    }
+
+                } else {
+                    printFlightHeader();
+                    for (Flight flight : newFlightList) {
+                        printFlight(flight);
+                    }
+                }
+
+
+                break;
+            case 0:
+                return;
+            default:
+                this.filterFlight();
+        }
+
+
+    }
+
+
+
+
 
     // Administrator methods
 
@@ -389,17 +515,15 @@ public class FlightFile extends  WorkOnFiles{
     }
 
     public void ExtractFlightFromFile(String filterTarget, ArrayList<Flight> filterFlights, long pos) throws IOException {
-        String temp = readString(pos);
 
-        if (temp.equals(filterTarget)) {
+//        randomAccessFile = new RandomAccessFile(flightPath, "rw");
 
-            randomAccessFile.seek(pos + STRING_FILE_SIZE *5);
+            randomAccessFile.seek(pos);
+//                                     // read FlightID // read Origen                             // read Destination                            // read Date                                     // read Time                                    // read Price               // read seats               // read BookedSeat
             Flight flight = new Flight(readString(pos), readString(pos + STRING_FILE_SIZE), readString(pos + STRING_FILE_SIZE *2), readString(pos + STRING_FILE_SIZE * 3), readString(pos + STRING_FILE_SIZE *4), randomAccessFile.readInt(), randomAccessFile.readInt(), randomAccessFile.readInt());
             filterFlights.add(flight);
-        }
+
     }
-
-
 
 
 }
