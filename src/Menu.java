@@ -121,10 +121,10 @@ public class Menu {
             case 3 -> PASSENGER_FILE.bookingTicket(FLIGHTS_FILE, passengerIndex, TICKET_FILE);
 
             // cancel
-//            case 4 -> AllUserList.cancellationTicket(passengerIndex, AllFlightsList);
+//            case 4 -> PASSENGER_FILE.cancellationTicket(passengerIndex, AllFlightsList);
 
             // see booked
-//            case 5 -> AllUserList.printBookedTicket(passengerIndex, AllFlightsList);
+            case 5 -> PASSENGER_FILE.printBookedTicket(passengerIndex, FLIGHTS_FILE, TICKET_FILE);
 
             // add charge
             case 6 -> PASSENGER_FILE.chargeAccount(passengerIndex);

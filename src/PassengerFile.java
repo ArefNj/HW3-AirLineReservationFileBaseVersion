@@ -89,7 +89,6 @@ public class PassengerFile extends WorkOnFiles{
         // Searching
         int FlightIndex = flights.searchFlightIndexLineByFlightID(flightId);
 
-        System.out.println(FlightIndex);
 
         // return if it has Not found
         if (FlightIndex == -1) {
@@ -113,7 +112,6 @@ public class PassengerFile extends WorkOnFiles{
         // GO TO PRICE SECTION
         pos = FlightIndex * flights.getLENGTH_OF_LINE() + STRING_FILE_SIZE * 5;
         randomAccessFile.seek(pos);
-        System.out.println(randomAccessFile.getFilePointer());
         int flightPrice = randomAccessFile.readInt();
         int flightSeats = randomAccessFile.readInt();
         int flightBookedSeats = randomAccessFile.readInt();
@@ -154,7 +152,7 @@ public class PassengerFile extends WorkOnFiles{
         // pay cash
         // USER FILE
         randomAccessFile = new RandomAccessFile(userPath, "rw");
-        pos = (long) (passengerIndexLine * LENGTH_OF_LINE) + STRING_FILE_SIZE * 2;
+        pos = (passengerIndexLine * LENGTH_OF_LINE) + STRING_FILE_SIZE * 2;
         randomAccessFile.seek(pos);
         randomAccessFile.writeInt(userCharge - flightPrice);
         randomAccessFile.close();
@@ -220,6 +218,56 @@ public class PassengerFile extends WorkOnFiles{
         }
     randomAccessFile.close();
         return -1;
+    }
+
+    /**
+     * Print booked Tickets
+     *
+     * @param passengerIndexLine the index of Passenger in All
+     * @param flights        List of all Flights
+     */
+    public void printBookedTicket(int passengerIndexLine, FlightFile flights, TicketFile ticketFile) throws IOException {
+        boolean flag = false;
+        randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
+        for (int i = 0; i < randomAccessFile.length() / ticketFile.getLENGTH_OF_LINE(); i++) {
+        randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
+
+            int pos =  i * ticketFile.getLENGTH_OF_LINE() + INT_SIZE + STRING_FILE_SIZE;
+            randomAccessFile.seek(pos);
+            int tempIndexChecker = randomAccessFile.readInt();
+
+            // once RUN CONDITION for print header table
+            if (!flag) {
+                flights.printFlightHeaderTickets();
+            }
+
+            // CHECK IF IT'S OK : PRINT WITH TICKET ID
+            if (tempIndexChecker == passengerIndexLine){
+
+                // GO TO FIRST OF LINE
+                pos = i * ticketFile.getLENGTH_OF_LINE();
+                randomAccessFile.seek(pos);
+
+                int tempTicketID = randomAccessFile.readInt();
+                String tempFlightId = readString(randomAccessFile.getFilePointer());
+                randomAccessFile.close();
+
+
+                pos = (int) (flights.searchFlightIndexLineByFlightID(tempFlightId) * flights.getLENGTH_OF_LINE());
+
+                Flight flight = flights.ExtractFlightFromFile(pos);
+                flights.printFlightWithTicketId(flight, tempTicketID);
+
+            }
+            flag = true;
+            randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
+
+        }
+        // NOT FOUND
+        if (!flag) {
+            System.out.println("nothing found");
+        }
+        new Menu().pause();
     }
 
 }

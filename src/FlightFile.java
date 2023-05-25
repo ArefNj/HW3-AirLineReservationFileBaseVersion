@@ -8,7 +8,7 @@ public class FlightFile extends  WorkOnFiles{
 
     private final long LENGTH_OF_LINE = 212;
 
-    private final String NO_FILTER = "X";
+    public final String NO_FILTER = "X";
 
 
 
@@ -519,6 +519,16 @@ public class FlightFile extends  WorkOnFiles{
 //                                     // read FlightID // read Origen                             // read Destination                            // read Date                                     // read Time                                    // read Price               // read seats               // read BookedSeat
             Flight flight = new Flight(readString(pos), readString(pos + STRING_FILE_SIZE), readString(pos + STRING_FILE_SIZE *2), readString(pos + STRING_FILE_SIZE * 3), readString(pos + STRING_FILE_SIZE *4), randomAccessFile.readInt(), randomAccessFile.readInt(), randomAccessFile.readInt());
             filterFlights.add(flight);
+
+    }
+
+    public Flight ExtractFlightFromFile(long pos) throws IOException {
+        randomAccessFile = new RandomAccessFile(flightPath, "r");
+        randomAccessFile.seek(pos);
+//                                     // read FlightID // read Origen                             // read Destination                            // read Date                                     // read Time                                    // read Price               // read seats               // read BookedSeat
+        Flight flight = new Flight(readString(pos), readString(pos + STRING_FILE_SIZE), readString(pos + STRING_FILE_SIZE *2), readString(pos + STRING_FILE_SIZE * 3), readString(pos + STRING_FILE_SIZE *4), randomAccessFile.readInt(), randomAccessFile.readInt(), randomAccessFile.readInt());
+
+        return flight;
 
     }
 

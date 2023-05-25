@@ -13,7 +13,7 @@ public class Ticket  extends  WorkOnFiles{
      */
     public Ticket(String flightId, int userIndexLine) {
         Random random = new Random();
-        this.ticketId = random.nextInt(1000);
+        this.ticketId = random.nextInt(100000);
         this.flightId = flightId;
         this.userIndexLine = userIndexLine;
     }
