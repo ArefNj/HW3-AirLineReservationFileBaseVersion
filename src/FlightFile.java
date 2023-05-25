@@ -104,6 +104,7 @@ public class FlightFile extends  WorkOnFiles{
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
 
         for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
+
             long pos = (long) i * LENGTH_OF_LINE;
             String flightID = readString(pos);
             if (flightID.equals(targetFlightId)) {
@@ -190,7 +191,6 @@ public class FlightFile extends  WorkOnFiles{
         }
         randomAccessFile.close();
     }
-
 
 
     /**
@@ -307,9 +307,6 @@ public class FlightFile extends  WorkOnFiles{
 
 
     }
-
-
-
 
 
     // Administrator methods
@@ -526,4 +523,11 @@ public class FlightFile extends  WorkOnFiles{
     }
 
 
+    public String getFlightPath() {
+        return flightPath;
+    }
+
+    public long getLENGTH_OF_LINE() {
+        return LENGTH_OF_LINE;
+    }
 }

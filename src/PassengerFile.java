@@ -7,7 +7,7 @@ public class PassengerFile extends WorkOnFiles{
     private final String userPath = "files/Users.kakasangi";
 
 
-    private final int LENGTH_OF_LINE = 84;
+    private final long LENGTH_OF_LINE = 84;
 
 
 
@@ -32,7 +32,6 @@ public class PassengerFile extends WorkOnFiles{
         randomAccessFile.close();
     }
 
-
     /**
      * Change Password method
      *
@@ -50,7 +49,6 @@ public class PassengerFile extends WorkOnFiles{
 
     }
 
-
     /**
      * Charge Account method
      *
@@ -60,7 +58,7 @@ public class PassengerFile extends WorkOnFiles{
         Scanner scan = new Scanner(System.in);
         randomAccessFile = new RandomAccessFile(userPath, "rw");
         // GO TO START OF LINE AND Charge SECTION
-        int pos = passengerIndexLine * LENGTH_OF_LINE + (STRING_FILE_SIZE* 2);
+        long pos = (passengerIndexLine * LENGTH_OF_LINE) + (STRING_FILE_SIZE* 2);
         randomAccessFile.seek(pos);
 
         int currentCharge = randomAccessFile.readInt();
@@ -74,6 +72,110 @@ public class PassengerFile extends WorkOnFiles{
         randomAccessFile.close();
     }
 
+
+    /**
+     * Booking Ticket Method
+     *
+     * @param flights   List all Flights
+     * @param passengerIndexLine the Passenger Index Line wants to buy Ticket
+     */
+    public void bookingTicket(FlightFile flights, int passengerIndexLine, TicketFile ticketFile) throws IOException {
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Please Enter Flight Id");
+        String flightId = scan.nextLine();
+
+
+        // Searching
+        int FlightIndex = flights.searchFlightIndexLineByFlightID(flightId);
+
+        System.out.println(FlightIndex);
+
+        // return if it has Not found
+        if (FlightIndex == -1) {
+            System.out.println("The Target Flight Not Found");
+            new Menu().pause();
+            return;
+        }
+
+
+        // PASSENGER FILE
+        randomAccessFile = new RandomAccessFile(userPath, "rw");
+        // GO TO CHARGE SECTION
+        long pos = (long) passengerIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE * 2;
+        randomAccessFile.seek(pos);
+        int userCharge =  randomAccessFile.readInt();
+        randomAccessFile.close();
+
+        // FLIGHT FILE
+        randomAccessFile = new RandomAccessFile(flights.getFlightPath(), "rw");
+
+        // GO TO PRICE SECTION
+        pos = FlightIndex * flights.getLENGTH_OF_LINE() + STRING_FILE_SIZE * 5;
+        randomAccessFile.seek(pos);
+        System.out.println(randomAccessFile.getFilePointer());
+        int flightPrice = randomAccessFile.readInt();
+        int flightSeats = randomAccessFile.readInt();
+        int flightBookedSeats = randomAccessFile.readInt();
+        randomAccessFile.close();
+
+        // CONDITIONS
+        // return if the Passenger account has not enough charge
+        if (userCharge < flightPrice) {
+            System.out.println("The price of flight is :" + flightPrice);
+            System.out.println("your balance :" + userCharge);
+            System.out.println("please charge your account");
+            new Menu().pause();
+            return;
+        }
+        // return if the flight is full
+        if (flightBookedSeats == flightSeats) {
+            System.out.println("The flight is full please choose another flight");
+            new Menu().pause();
+            return;
+        }
+
+
+        // Creat new ticket
+        Ticket newTicket = new Ticket(flightId,passengerIndexLine);
+        // TICKET FILE
+        randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
+        int ticketCount = (int) (randomAccessFile.length() / ticketFile.getLENGTH_OF_LINE());
+        pos = (long) ticketCount * ticketFile.getLENGTH_OF_LINE();
+        randomAccessFile.seek(pos);
+        randomAccessFile.writeInt(newTicket.getTicketId()); // 0 - 4 TICKET ID
+        randomAccessFile.writeChars(fixStringToWrite(newTicket.getFlightId())); // 4 - 44 FLIGHT ID
+        randomAccessFile.writeInt(newTicket.getUserIndexLine()); // 44 - 48 USER INDEX LINE
+
+        randomAccessFile.close();
+
+
+
+        // pay cash
+        // USER FILE
+        randomAccessFile = new RandomAccessFile(userPath, "rw");
+        pos = (long) (passengerIndexLine * LENGTH_OF_LINE) + STRING_FILE_SIZE * 2;
+        randomAccessFile.seek(pos);
+        randomAccessFile.writeInt(userCharge - flightPrice);
+        randomAccessFile.close();
+
+        // add one to booked seats
+
+        // FLIGHT FILE
+        randomAccessFile = new RandomAccessFile(flights.getFlightPath(), "rw");
+        pos = (FlightIndex * flights.getLENGTH_OF_LINE()) + (STRING_FILE_SIZE * 5 ) + (INT_SIZE * 2);
+        randomAccessFile.seek(pos);
+        randomAccessFile.writeInt(flightBookedSeats + 1);
+        randomAccessFile.close();
+
+        // show massage
+        System.out.println("the Flight Booked");
+
+        new Menu().pause();
+
+    }
+
+
     /**
      * Searching an id form User ArrayList
      *
@@ -82,7 +184,7 @@ public class PassengerFile extends WorkOnFiles{
      */
     public int findUserIndex(String targetId) throws IOException {
         randomAccessFile = new RandomAccessFile(userPath, "rw");
-        int pos;
+        long pos;
         for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
             pos = i * LENGTH_OF_LINE;
             if (readString(pos).equals(targetId)) {
@@ -103,7 +205,7 @@ public class PassengerFile extends WorkOnFiles{
      */
     public int findUserIndex(String targetId, String targetPass) throws IOException {
         randomAccessFile = new RandomAccessFile(userPath, "rw");
-        int pos;
+        long pos;
         for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
             pos = i * LENGTH_OF_LINE;
 
