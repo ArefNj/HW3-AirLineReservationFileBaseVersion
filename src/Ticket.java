@@ -3,7 +3,6 @@ import java.util.Random;
 public class Ticket  extends  WorkOnFiles{
     private int ticketId;
     private String flightId;
-
     private int userIndexLine;
 
 //    private boolean ticketIdSet = false;

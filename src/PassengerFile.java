@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
@@ -138,9 +139,14 @@ public class PassengerFile extends WorkOnFiles{
         Ticket newTicket = new Ticket(flightId,passengerIndexLine);
         // TICKET FILE
         randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
-        int ticketCount = (int) (randomAccessFile.length() / ticketFile.getLENGTH_OF_LINE());
-        pos = (long) ticketCount * ticketFile.getLENGTH_OF_LINE();
-        randomAccessFile.seek(pos);
+        int emptySpace = ticketFile.searchInTicketFileByTicketId(-404);
+
+        if // GO TO EMPTY SPACE
+        (emptySpace != -1)
+        { randomAccessFile.seek((long) emptySpace * ticketFile.getLENGTH_OF_LINE()); }
+        else // GO TO END OF FILE
+        { randomAccessFile.seek(randomAccessFile.length()); }
+
         randomAccessFile.writeInt(newTicket.getTicketId()); // 0 - 4 TICKET ID
         randomAccessFile.writeChars(fixStringToWrite(newTicket.getFlightId())); // 4 - 44 FLIGHT ID
         randomAccessFile.writeInt(newTicket.getUserIndexLine()); // 44 - 48 USER INDEX LINE
@@ -172,6 +178,73 @@ public class PassengerFile extends WorkOnFiles{
         new Menu().pause();
 
     }
+
+
+    /**
+     * Cancellation method
+     * 1. search between tickets from ticket file to find the index of ticket in ticket file
+     * 2. if it found -> Refund money to passenger
+     * 3. Remove a booked seat
+     * 4. Remove Ticket From Ticket file
+     *
+     * @param passengerIndex Index OF Line OF passenger File
+     * @param flights        Flights File
+     * @param tickets       Tickets File
+     */
+    public void cancellationTicket(int passengerIndex, FlightFile flights, TicketFile tickets) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println(" \n");
+        System.out.println("""
+                      Please Enter the ticket Id Which flight do yo want to remove
+                      
+                <<The system deducts 10% of the flight money as a penalty from your account
+                       and returns the rest of the flight money to your account>>""");
+
+        // GET TICKET INDEX LINE
+
+        // get TicketId
+        int ticketID = scanner.nextInt();
+        int ticketIndexLine = tickets.searchInTicketFileByTicketId(ticketID);
+        int passengerIndexLine = tickets.getPassengerIndexLine(ticketIndexLine);
+
+        // Not found condition for Ticket id
+        if (ticketIndexLine == -1 || passengerIndexLine != passengerIndex) {
+            System.out.println("the target ticket ID not found");
+            new Menu().pause();
+            return;
+        }
+
+        // REFUND MONEY
+        String flightID = tickets.getFLightID(ticketIndexLine);
+        int flightIndex = flights.searchFlightIndexLineByFlightID(flightID);
+        int flightPrice = flights.priceOfFLight(flightIndex);
+        refundMoney(passengerIndex, flightPrice);
+
+        // REMOVE A BOOKED SEAT
+        flights.removeBookedSeat(flightIndex);
+
+        // REMOVE TICKET FROM TICKET FILE
+
+        tickets.removeTicketFromTicketFile(ticketIndexLine);
+
+        System.out.println("<Flight removed>");
+        new Menu().pause();
+
+    }
+
+    public boolean refundMoney(long indexLine, int priceOfFlight) throws IOException {
+        randomAccessFile = new RandomAccessFile(userPath, "rw");
+        long pos = (indexLine * LENGTH_OF_LINE) + STRING_FILE_SIZE *2;
+        randomAccessFile.seek(pos);
+
+        int passengerCharge = randomAccessFile.readInt();
+        randomAccessFile.seek(randomAccessFile.getFilePointer() - INT_SIZE);
+        randomAccessFile.writeInt(passengerCharge + (priceOfFlight * 9 / 10));
+        randomAccessFile.close();
+        return true;
+    }
+
 
 
     /**

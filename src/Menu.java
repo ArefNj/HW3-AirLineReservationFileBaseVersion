@@ -101,7 +101,7 @@ public class Menu {
     /** Passenger Menu method
      *  use a SwitchCase for go to other methods
      */
-    public void passengerMenu(int passengerIndex) throws IOException {
+    public void passengerMenu(int passengerIndexLine) throws IOException {
         printPassengerMenu();
         Scanner scan = new Scanner(System.in);
         int key = scan.nextInt();
@@ -112,22 +112,22 @@ public class Menu {
                 System.out.print("Enter new password\n");
                 scan.nextLine();
                 String newPassengerPassword = scan.nextLine();
-                PASSENGER_FILE.changePassword(passengerIndex, newPassengerPassword);
+                PASSENGER_FILE.changePassword(passengerIndexLine, newPassengerPassword);
             }
             // searching
             case 2 -> FLIGHTS_FILE.filterFlight();
 
             // booking
-            case 3 -> PASSENGER_FILE.bookingTicket(FLIGHTS_FILE, passengerIndex, TICKET_FILE);
+            case 3 -> PASSENGER_FILE.bookingTicket(FLIGHTS_FILE, passengerIndexLine, TICKET_FILE);
 
             // cancel
-//            case 4 -> PASSENGER_FILE.cancellationTicket(passengerIndex, AllFlightsList);
+            case 4 -> PASSENGER_FILE.cancellationTicket(passengerIndexLine, FLIGHTS_FILE, TICKET_FILE);
 
             // see booked
-            case 5 -> PASSENGER_FILE.printBookedTicket(passengerIndex, FLIGHTS_FILE, TICKET_FILE);
+            case 5 -> PASSENGER_FILE.printBookedTicket(passengerIndexLine, FLIGHTS_FILE, TICKET_FILE);
 
             // add charge
-            case 6 -> PASSENGER_FILE.chargeAccount(passengerIndex);
+            case 6 -> PASSENGER_FILE.chargeAccount(passengerIndexLine);
             case 0 -> {
                 System.out.println(" Have nice day !");
                 pause();
@@ -136,10 +136,10 @@ public class Menu {
             default -> {
                 System.out.println("please check your entry");
                 pause();
-                this.passengerMenu(passengerIndex);
+                this.passengerMenu(passengerIndexLine);
             }
         }
-        this.passengerMenu(passengerIndex);
+        this.passengerMenu(passengerIndexLine);
 
     }
 

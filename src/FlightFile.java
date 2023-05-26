@@ -130,7 +130,7 @@ public class FlightFile extends  WorkOnFiles{
             // GO TO ORIGIN SECTION
             long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE;
             if (readString(pos).equals(targetFlightOrigen)){
-            ExtractFlightFromFile(targetFlightOrigen, filterFlights,i * LENGTH_OF_LINE );
+            ExtractFlightFromFile(filterFlights,i * LENGTH_OF_LINE );
 
             }
 
@@ -148,12 +148,40 @@ public class FlightFile extends  WorkOnFiles{
     public void filterFlightsByDestination(String targetDestination, ArrayList<Flight> filterFlights) throws IOException {
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
 
-        for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
-            // GO TO DESTINATION SECTION
-            long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 2;
-            ExtractFlightFromFile(targetDestination, filterFlights, pos);
+
+        for (int i = 0; i < randomAccessFile.length()/ LENGTH_OF_LINE; i++) {
+            // GO TO destination SECTION
+            int pos = (int) (( i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 2);
+            if (readString(pos).equals(targetDestination)){
+                // GO TO FIRST OF LINE
+                pos = (int) (( i * LENGTH_OF_LINE));
+                ExtractFlightFromFile(filterFlights,pos);
+
+            }
+
         }
+
         randomAccessFile.close();
+    }
+
+    public boolean removeBookedSeat(int flightIndexLine) throws IOException {
+        randomAccessFile = new RandomAccessFile(flightPath, "rw");
+        randomAccessFile.seek((flightIndexLine * LENGTH_OF_LINE) + (STRING_FILE_SIZE*5 + INT_SIZE * 2));
+        int countOFBookedSeats = randomAccessFile.readInt();
+        randomAccessFile.seek(randomAccessFile.getFilePointer() - INT_SIZE);
+        randomAccessFile.writeInt(countOFBookedSeats - 1);
+        randomAccessFile.close();
+        return true;
+    }
+
+    public int priceOfFLight(int flightIndexLine) throws IOException {
+        randomAccessFile = new RandomAccessFile(flightPath, "r");
+        long pos = (flightIndexLine * LENGTH_OF_LINE ) + (STRING_FILE_SIZE * 5);
+        randomAccessFile.seek(pos);
+        int price = randomAccessFile.readInt();
+        randomAccessFile.close();
+        return price;
+
     }
 
 
@@ -167,13 +195,22 @@ public class FlightFile extends  WorkOnFiles{
     public void filterFlightsByDate(String targetDate, ArrayList<Flight> filterFlights) throws IOException {
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
 
-        for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE ; i++) {
-            // GO TO DATE SECTION
-            long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 3;
-            ExtractFlightFromFile(targetDate, filterFlights, pos);
+
+        for (int i = 0; i < randomAccessFile.length()/ LENGTH_OF_LINE; i++) {
+            // GO TO date SECTION
+            int pos = (int) (( i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 3);
+            if (readString(pos).equals(targetDate)){
+                // GO TO FIRST OF LINE
+                pos = (int) (( i * LENGTH_OF_LINE));
+                ExtractFlightFromFile(filterFlights,pos);
+
+            }
+
         }
+
         randomAccessFile.close();
     }
+
 
     /**
      * filter flights by time
@@ -184,11 +221,19 @@ public class FlightFile extends  WorkOnFiles{
     public void filterFlightsByTime(String targetTime, ArrayList<Flight> filterFlights) throws IOException {
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
 
-        for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE ; i++) {
-            // GO TO DATE SECTION
-            long pos = ((long) i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 4;
-            ExtractFlightFromFile(targetTime, filterFlights, pos);
+
+        for (int i = 0; i < randomAccessFile.length()/ LENGTH_OF_LINE; i++) {
+            // GO TO time SECTION
+            int pos = (int) (( i * LENGTH_OF_LINE) + STRING_FILE_SIZE * 4);
+            if (readString(pos).equals(targetTime)){
+                // GO TO FIRST OF LINE
+                pos = (int) (( i * LENGTH_OF_LINE));
+                ExtractFlightFromFile(filterFlights,pos);
+
+            }
+
         }
+
         randomAccessFile.close();
     }
 
@@ -260,7 +305,7 @@ public class FlightFile extends  WorkOnFiles{
 
                     for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
                         long pos = i * LENGTH_OF_LINE;
-                        ExtractFlightFromFile(NO_FILTER ,newFlightList , pos );
+                        ExtractFlightFromFile(newFlightList , pos );
                     }
                     randomAccessFile.close();
                 }
@@ -321,7 +366,7 @@ public class FlightFile extends  WorkOnFiles{
         String tempID = scan.nextLine();
 
         // check ID
-        if (searchFlightIndexLineByFlightID(tempID) != -1) {
+        if (searchFlightIndexLineByFlightID(tempID) != -1 || tempID.equals("N/A")) {
             System.out.println("This id has taken");
             return;
         }
@@ -511,24 +556,21 @@ public class FlightFile extends  WorkOnFiles{
 
     }
 
-    public void ExtractFlightFromFile(String filterTarget, ArrayList<Flight> filterFlights, long pos) throws IOException {
+    public void ExtractFlightFromFile(ArrayList<Flight> filterFlights, long pos) throws IOException {
 
-//        randomAccessFile = new RandomAccessFile(flightPath, "rw");
-
+            randomAccessFile = new RandomAccessFile(flightPath, "rw");
             randomAccessFile.seek(pos);
-//                                     // read FlightID // read Origen                             // read Destination                            // read Date                                     // read Time                                    // read Price               // read seats               // read BookedSeat
+                                // read FlightID       // read Origen                             // read Destination                            // read Date                                     // read Time                                    // read Price               // read seats               // read BookedSeat
             Flight flight = new Flight(readString(pos), readString(pos + STRING_FILE_SIZE), readString(pos + STRING_FILE_SIZE *2), readString(pos + STRING_FILE_SIZE * 3), readString(pos + STRING_FILE_SIZE *4), randomAccessFile.readInt(), randomAccessFile.readInt(), randomAccessFile.readInt());
             filterFlights.add(flight);
 
     }
 
     public Flight ExtractFlightFromFile(long pos) throws IOException {
-        randomAccessFile = new RandomAccessFile(flightPath, "r");
+        randomAccessFile = new RandomAccessFile(flightPath, "rw");
         randomAccessFile.seek(pos);
-//                                     // read FlightID // read Origen                             // read Destination                            // read Date                                     // read Time                                    // read Price               // read seats               // read BookedSeat
-        Flight flight = new Flight(readString(pos), readString(pos + STRING_FILE_SIZE), readString(pos + STRING_FILE_SIZE *2), readString(pos + STRING_FILE_SIZE * 3), readString(pos + STRING_FILE_SIZE *4), randomAccessFile.readInt(), randomAccessFile.readInt(), randomAccessFile.readInt());
-
-        return flight;
+                  // read FlightID         // read Origen                             // read Destination                            // read Date                                     // read Time                                    // read Price               // read seats               // read BookedSeat
+        return new Flight(readString(pos), readString(pos + STRING_FILE_SIZE), readString(pos + STRING_FILE_SIZE *2), readString(pos + STRING_FILE_SIZE * 3), readString(pos + STRING_FILE_SIZE *4), randomAccessFile.readInt(), randomAccessFile.readInt(), randomAccessFile.readInt());
 
     }
 
