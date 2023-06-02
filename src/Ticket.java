@@ -1,11 +1,9 @@
 import java.util.Random;
 
 public class Ticket  extends  WorkOnFiles{
-    private int ticketId;
-    private String flightId;
-    private int userIndexLine;
-
-//    private boolean ticketIdSet = false;
+    private final int ticketId;
+    private final String flightId;
+    private final int userIndexLine;
 
     /**
      * Generate Ticket id
@@ -17,37 +15,18 @@ public class Ticket  extends  WorkOnFiles{
         this.userIndexLine = userIndexLine;
     }
 
-//    public void generateTicketId() {
-//        Random random = new Random();
-//        if (!ticketIdSet) {
-//            ticketId = random.nextInt(100);
-//            ticketIdSet = true;
-//        }
-//    }
-
     /** Setter & Getters */
 
     public int getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(int ticketId) {
-        this.ticketId = ticketId;
-    }
-
     public String getFlightId() {
         return flightId;
-    }
-
-    public void setFlightId(String flightId) {
-        this.flightId = flightId;
     }
 
     public int getUserIndexLine() {
         return userIndexLine;
     }
 
-    public void setUserIndexLine(int userIndexLine) {
-        this.userIndexLine = userIndexLine;
-    }
 }

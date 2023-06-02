@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -41,14 +40,13 @@ public class TicketFile extends WorkOnFiles{
         randomAccessFile.close();
         return -1;
     }
-    public boolean removeTicketFromTicketFile(int startPos) throws IOException {
+    public void removeTicketFromTicketFile(int startPos) throws IOException {
         randomAccessFile = new RandomAccessFile(ticketPath, "rw");
         randomAccessFile.seek((long) startPos * LENGTH_OF_LINE);
         randomAccessFile.writeInt(-404);
         randomAccessFile.writeChars(fixStringToWrite("N/A"));
         randomAccessFile.writeInt(-404);
         randomAccessFile.close();
-        return true;
     }
     public String getTicketPath() {
         return ticketPath;

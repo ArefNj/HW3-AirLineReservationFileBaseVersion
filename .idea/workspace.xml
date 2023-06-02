@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dee4e575-340d-4155-aa4a-f5e813a70243" name="Changes" comment="Add Passenger see Booked ticket for passenger">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="dee4e575-340d-4155-aa4a-f5e813a70243" name="Changes" comment="Add cancellation option">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/Flights.kakasangi" beforeDir="false" afterPath="$PROJECT_DIR$/files/Flights.kakasangi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/Tickets.kakasangi" beforeDir="false" afterPath="$PROJECT_DIR$/files/Tickets.kakasangi" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/Users.kakasangi" beforeDir="false" afterPath="$PROJECT_DIR$/files/Users.kakasangi" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/FlightFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/FlightFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/PassengerFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/PassengerFile.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ticket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TicketFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/TicketFile.java" afterDir="false" />
@@ -73,7 +68,9 @@
       <workItem from="1684930197518" duration="4678000" />
       <workItem from="1684938507486" duration="3623000" />
       <workItem from="1684992646824" duration="9545000" />
-      <workItem from="1685080870198" duration="9485000" />
+      <workItem from="1685080870198" duration="10148000" />
+      <workItem from="1685271953593" duration="550000" />
+      <workItem from="1685290641731" duration="598000" />
     </task>
     <task id="LOCAL-00001" summary="init commit , Add classes , Add WorkOnFiles , rewrite some methods ( I Don't remember :) )">
       <created>1684396197784</created>
@@ -145,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685002470502</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Add cancellation option">
+      <created>1685090792193</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1685090792193</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,6 +177,7 @@
     <MESSAGE value="Add Passenger Filter section" />
     <MESSAGE value="Add Passenger Booking ticket system" />
     <MESSAGE value="Add Passenger see Booked ticket for passenger" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Passenger see Booked ticket for passenger" />
+    <MESSAGE value="Add cancellation option" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add cancellation option" />
   </component>
 </project>

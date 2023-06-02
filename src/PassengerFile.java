@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
@@ -233,7 +232,7 @@ public class PassengerFile extends WorkOnFiles{
 
     }
 
-    public boolean refundMoney(long indexLine, int priceOfFlight) throws IOException {
+    public void refundMoney(long indexLine, int priceOfFlight) throws IOException {
         randomAccessFile = new RandomAccessFile(userPath, "rw");
         long pos = (indexLine * LENGTH_OF_LINE) + STRING_FILE_SIZE *2;
         randomAccessFile.seek(pos);
@@ -242,7 +241,6 @@ public class PassengerFile extends WorkOnFiles{
         randomAccessFile.seek(randomAccessFile.getFilePointer() - INT_SIZE);
         randomAccessFile.writeInt(passengerCharge + (priceOfFlight * 9 / 10));
         randomAccessFile.close();
-        return true;
     }
 
 

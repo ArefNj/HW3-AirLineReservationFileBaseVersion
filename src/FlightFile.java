@@ -164,14 +164,13 @@ public class FlightFile extends  WorkOnFiles{
         randomAccessFile.close();
     }
 
-    public boolean removeBookedSeat(int flightIndexLine) throws IOException {
+    public void removeBookedSeat(int flightIndexLine) throws IOException {
         randomAccessFile = new RandomAccessFile(flightPath, "rw");
         randomAccessFile.seek((flightIndexLine * LENGTH_OF_LINE) + (STRING_FILE_SIZE*5 + INT_SIZE * 2));
         int countOFBookedSeats = randomAccessFile.readInt();
         randomAccessFile.seek(randomAccessFile.getFilePointer() - INT_SIZE);
         randomAccessFile.writeInt(countOFBookedSeats - 1);
         randomAccessFile.close();
-        return true;
     }
 
     public int priceOfFLight(int flightIndexLine) throws IOException {
