@@ -2,6 +2,10 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Admin {
+
+    /**
+     * singleton admin instance
+     */
     private static Admin singletonAdmin;
 
     private Admin() {
@@ -14,6 +18,9 @@ public class Admin {
         return singletonAdmin;
     }
 
+    /**
+     * Admin section
+     */
     public void admin(FlightFile flights) throws IOException {
         Scanner scan = new Scanner(System.in);
         new Menu().printAdminMenu();

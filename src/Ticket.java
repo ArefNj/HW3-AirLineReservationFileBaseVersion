@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Ticket  extends  WorkOnFiles{
+public class Ticket extends WorkOnFiles {
     private final int ticketId;
     private final String flightId;
     private final int userIndexLine;
@@ -15,8 +15,9 @@ public class Ticket  extends  WorkOnFiles{
         this.userIndexLine = userIndexLine;
     }
 
-    /** Setter & Getters */
-
+    /**
+     * Setter & Getters
+     */
     public int getTicketId() {
         return ticketId;
     }

@@ -30,7 +30,7 @@ public class Menu {
      * Admin Menu :
      * UserId : Admin | Password : Admin
      * else :
-     *  go to passenger Menu
+     * go to passenger Menu
      */
     public void signIn() throws IOException {
         Scanner scan = new Scanner(System.in);
@@ -54,7 +54,7 @@ public class Menu {
         }
         // else Users
         else {
-            int indexKey = PASSENGER_FILE.findUserIndex(tempId, tempPass);
+            int indexKey = PASSENGER_FILE.checkIdAndPassword(tempId, tempPass);
             if (indexKey == -1) {
                 System.out.println("Entry id or password is wrong");
                 pause();
@@ -69,7 +69,6 @@ public class Menu {
     /**
      * SignUp method
      * get a user ID & Password for account
-     *
      */
     public void signUp() throws IOException {
         Scanner scan = new Scanner(System.in);
@@ -82,7 +81,7 @@ public class Menu {
             this.menu();
         }
 
-        if (PASSENGER_FILE.findUserIndex(tempId) != -1 || tempId.equals("Admin")) {
+        if (PASSENGER_FILE.searchID(tempId) != -1 || tempId.equals("Admin")) {
             System.out.println("The User name was Token");
             pause();
             this.signUp();
@@ -98,8 +97,11 @@ public class Menu {
 
     }
 
-    /** Passenger Menu method
-     *  use a SwitchCase for go to other methods
+    /**
+     * Passenger Menu method
+     * use a SwitchCase for go to other methods
+     *
+     * @param passengerIndexLine The index of passenger record
      */
     public void passengerMenu(int passengerIndexLine) throws IOException {
         printPassengerMenu();

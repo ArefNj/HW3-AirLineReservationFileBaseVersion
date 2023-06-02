@@ -2,13 +2,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Scanner;
 
-public class PassengerFile extends WorkOnFiles{
+public class PassengerFile extends WorkOnFiles {
 
     private final String userPath = "files/Users.kakasangi";
 
 
     private final long LENGTH_OF_LINE = 84;
-
 
 
     /**
@@ -35,13 +34,13 @@ public class PassengerFile extends WorkOnFiles{
     /**
      * Change Password method
      *
-     * @param passengerIndexLine the index of Passenger in All
-     * @param newPass        the new password
+     * @param passengerIndexLine the index of Passenger record in All
+     * @param newPass            the new password
      */
     public void changePassword(int passengerIndexLine, String newPass) throws IOException {
         randomAccessFile = new RandomAccessFile(userPath, "rw");
         // GO TO START OF LINE AND PASSWORD SECTION
-        randomAccessFile.seek((long) passengerIndexLine * LENGTH_OF_LINE +(STRING_FILE_SIZE));
+        randomAccessFile.seek((long) passengerIndexLine * LENGTH_OF_LINE + (STRING_FILE_SIZE));
         randomAccessFile.writeChars(fixStringToWrite(newPass));
 
 
@@ -52,13 +51,13 @@ public class PassengerFile extends WorkOnFiles{
     /**
      * Charge Account method
      *
-     * @param passengerIndexLine the index of Passenger in All
+     * @param passengerIndexLine the index of Passenger record in All
      */
     public void chargeAccount(int passengerIndexLine) throws IOException {
         Scanner scan = new Scanner(System.in);
         randomAccessFile = new RandomAccessFile(userPath, "rw");
         // GO TO START OF LINE AND Charge SECTION
-        long pos = (passengerIndexLine * LENGTH_OF_LINE) + (STRING_FILE_SIZE* 2);
+        long pos = (passengerIndexLine * LENGTH_OF_LINE) + (STRING_FILE_SIZE * 2);
         randomAccessFile.seek(pos);
 
         int currentCharge = randomAccessFile.readInt();
@@ -76,7 +75,7 @@ public class PassengerFile extends WorkOnFiles{
     /**
      * Booking Ticket Method
      *
-     * @param flights   List all Flights
+     * @param flights            List all Flights
      * @param passengerIndexLine the Passenger Index Line wants to buy Ticket
      */
     public void bookingTicket(FlightFile flights, int passengerIndexLine, TicketFile ticketFile) throws IOException {
@@ -103,7 +102,7 @@ public class PassengerFile extends WorkOnFiles{
         // GO TO CHARGE SECTION
         long pos = (long) passengerIndexLine * LENGTH_OF_LINE + STRING_FILE_SIZE * 2;
         randomAccessFile.seek(pos);
-        int userCharge =  randomAccessFile.readInt();
+        int userCharge = randomAccessFile.readInt();
         randomAccessFile.close();
 
         // FLIGHT FILE
@@ -135,23 +134,24 @@ public class PassengerFile extends WorkOnFiles{
 
 
         // Creat new ticket
-        Ticket newTicket = new Ticket(flightId,passengerIndexLine);
+        Ticket newTicket = new Ticket(flightId, passengerIndexLine);
         // TICKET FILE
         randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
         int emptySpace = ticketFile.searchInTicketFileByTicketId(-404);
 
         if // GO TO EMPTY SPACE
-        (emptySpace != -1)
-        { randomAccessFile.seek((long) emptySpace * ticketFile.getLENGTH_OF_LINE()); }
-        else // GO TO END OF FILE
-        { randomAccessFile.seek(randomAccessFile.length()); }
+        (emptySpace != -1) {
+            randomAccessFile.seek((long) emptySpace * ticketFile.getLENGTH_OF_LINE());
+        } else // GO TO END OF FILE
+        {
+            randomAccessFile.seek(randomAccessFile.length());
+        }
 
         randomAccessFile.writeInt(newTicket.getTicketId()); // 0 - 4 TICKET ID
         randomAccessFile.writeChars(fixStringToWrite(newTicket.getFlightId())); // 4 - 44 FLIGHT ID
         randomAccessFile.writeInt(newTicket.getUserIndexLine()); // 44 - 48 USER INDEX LINE
 
         randomAccessFile.close();
-
 
 
         // pay cash
@@ -166,7 +166,7 @@ public class PassengerFile extends WorkOnFiles{
 
         // FLIGHT FILE
         randomAccessFile = new RandomAccessFile(flights.getFlightPath(), "rw");
-        pos = (FlightIndex * flights.getLENGTH_OF_LINE()) + (STRING_FILE_SIZE * 5 ) + (INT_SIZE * 2);
+        pos = (FlightIndex * flights.getLENGTH_OF_LINE()) + (STRING_FILE_SIZE * 5) + (INT_SIZE * 2);
         randomAccessFile.seek(pos);
         randomAccessFile.writeInt(flightBookedSeats + 1);
         randomAccessFile.close();
@@ -188,7 +188,7 @@ public class PassengerFile extends WorkOnFiles{
      *
      * @param passengerIndex Index OF Line OF passenger File
      * @param flights        Flights File
-     * @param tickets       Tickets File
+     * @param tickets        Tickets File
      */
     public void cancellationTicket(int passengerIndex, FlightFile flights, TicketFile tickets) throws IOException {
         Scanner scanner = new Scanner(System.in);
@@ -232,9 +232,16 @@ public class PassengerFile extends WorkOnFiles{
 
     }
 
+    /**
+     * calculate and refund money after cancel ticket
+     *
+     * @param indexLine     the passenger record index
+     * @param priceOfFlight price of flight
+     * @throws IOException work with file exceptions
+     */
     public void refundMoney(long indexLine, int priceOfFlight) throws IOException {
         randomAccessFile = new RandomAccessFile(userPath, "rw");
-        long pos = (indexLine * LENGTH_OF_LINE) + STRING_FILE_SIZE *2;
+        long pos = (indexLine * LENGTH_OF_LINE) + STRING_FILE_SIZE * 2;
         randomAccessFile.seek(pos);
 
         int passengerCharge = randomAccessFile.readInt();
@@ -243,18 +250,16 @@ public class PassengerFile extends WorkOnFiles{
         randomAccessFile.close();
     }
 
-
-
     /**
      * Searching an id form User ArrayList
      *
      * @param targetId the id we're looking for
      * @return The indexOf the targetId ( return -1 if it was not found )
      */
-    public int findUserIndex(String targetId) throws IOException {
+    public int searchID(String targetId) throws IOException {
         randomAccessFile = new RandomAccessFile(userPath, "rw");
         long pos;
-        for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
+        for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
             pos = i * LENGTH_OF_LINE;
             if (readString(pos).equals(targetId)) {
                 randomAccessFile.close();
@@ -272,10 +277,10 @@ public class PassengerFile extends WorkOnFiles{
      * @param targetPass the password we're looking for
      * @return The indexOf the targetId ( return -1 if it was not found )
      */
-    public int findUserIndex(String targetId, String targetPass) throws IOException {
+    public int checkIdAndPassword(String targetId, String targetPass) throws IOException {
         randomAccessFile = new RandomAccessFile(userPath, "rw");
         long pos;
-        for (int i = 0; i < randomAccessFile.length()/LENGTH_OF_LINE; i++) {
+        for (int i = 0; i < randomAccessFile.length() / LENGTH_OF_LINE; i++) {
             pos = i * LENGTH_OF_LINE;
 
             if (readString(pos).equals(targetId)) {
@@ -287,7 +292,7 @@ public class PassengerFile extends WorkOnFiles{
                 return -1;
             }
         }
-    randomAccessFile.close();
+        randomAccessFile.close();
         return -1;
     }
 
@@ -295,15 +300,15 @@ public class PassengerFile extends WorkOnFiles{
      * Print booked Tickets
      *
      * @param passengerIndexLine the index of Passenger in All
-     * @param flights        List of all Flights
+     * @param flights            List of all Flights
      */
     public void printBookedTicket(int passengerIndexLine, FlightFile flights, TicketFile ticketFile) throws IOException {
         boolean flag = false;
         randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
         for (int i = 0; i < randomAccessFile.length() / ticketFile.getLENGTH_OF_LINE(); i++) {
-        randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
+            randomAccessFile = new RandomAccessFile(ticketFile.getTicketPath(), "rw");
 
-            int pos =  i * ticketFile.getLENGTH_OF_LINE() + INT_SIZE + STRING_FILE_SIZE;
+            int pos = i * ticketFile.getLENGTH_OF_LINE() + INT_SIZE + STRING_FILE_SIZE;
             randomAccessFile.seek(pos);
             int tempIndexChecker = randomAccessFile.readInt();
 
@@ -313,7 +318,7 @@ public class PassengerFile extends WorkOnFiles{
             }
 
             // CHECK IF IT'S OK : PRINT WITH TICKET ID
-            if (tempIndexChecker == passengerIndexLine){
+            if (tempIndexChecker == passengerIndexLine) {
 
                 // GO TO FIRST OF LINE
                 pos = i * ticketFile.getLENGTH_OF_LINE();
